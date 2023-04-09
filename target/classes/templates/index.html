@@ -1,0 +1,594 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>User profile info with posts</title>
+<link rel="stylesheet" type="text/css" href="static/style.css">
+<!--bootstrap for index page-->
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<link
+	href="https://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+	rel="stylesheet">
+<script
+	src="https://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.3.1.js"
+	integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+	crossorigin="anonymous">
+    </script>
+
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
+	rel="stylesheet">
+</head>
+<body>
+	<br>
+	<br>
+	<div class="container">
+		<!-- Header goes here -->
+		<div th:replace="~{header :: header}"></div>
+
+		<br> <br>
+		<p style="color: #7F7FD5; padding-top: 20px">
+			Welcome <span th:text="${user.firstName +' ' + user.lastName}">User</span>
+		</p>
+		<div class="profile-wrapper">
+			<div class="profile-section-user">
+				<div class="profile-cover-img">
+					<img
+						src="https://bootdey.com/img/Content/flores-amarillas-wallpaper.jpeg"
+						alt="">
+				</div>
+
+				<div class="profile-info-brief p-3">
+					<img class="img-fluid user-profile-avatar"
+						th:src="${user.profilePicture}" alt="">
+					<div class="text-center">
+						<h5 class="text-uppercase mb-4" style="color: #7F7FD5;"
+							th:text="${user.firstName +' ' + user.lastName}">Max Remy</h5>
+						<p class="text-muted fz-base">Hi there, I'm here to introduce
+							you to the wonderful world of gaming! Just like you, I love to
+							play games and have fun.</p>
+					</div>
+				</div>
+
+				<hr class="m-0">
+				<div class="hidden-sm-down">
+					<hr class="m-0">
+					<div class="profile-info-contact p-4">
+						<h6 class="mb-3">Contact Information</h6>
+						<table class="table">
+							<tbody>
+								<tr>
+									<td><strong>URL:</strong></td>
+									<td>
+										<p class="text-muted mb-0">https://github.com/KatyaMa</p>
+									</td>
+								</tr>
+								<tr>
+									<td><strong>EMAIL:</strong></td>
+									<td>
+										<p class="text-muted mb-0">
+											<a sec:authentication="principal.username"></a>
+										</p>
+									</td>
+								</tr>
+								<tr>
+									<td><strong>PHONE:</strong></td>
+									<td>
+										<p class="text-muted mb-0">01145525755</p>
+									</td>
+								</tr>
+								<tr>
+									<td><strong>ROBLOX NICKNAME:</strong></td>
+									<td>
+										<p class="text-muted mb-0">Real Chill</p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<hr class="m-0">
+					<div class="profile-info-general p-4">
+						<h6 class="mb-3">General Information</h6>
+						<table class="table">
+							<tbody>
+								<tr>
+									<td><strong>FAVORITE GAME:</strong></td>
+									<td>
+										<p class="text-muted mb-0">Roblox</p>
+									</td>
+								</tr>
+								<tr>
+									<td><strong>FAVORITE COLOR:</strong></td>
+									<td>
+										<p class="text-muted mb-0">Red</p>
+									</td>
+								</tr>
+								<tr>
+									<td><strong>STUDIED:</strong></td>
+									<td>
+										<p class="text-muted mb-0">Computer Science</p>
+									</td>
+								</tr>
+								<tr>
+									<td><strong>LAST SEEN:</strong></td>
+									<td>
+										<p class="text-muted mb-0">Yesterday 8:00 AM</p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<hr class="m-0">
+				</div>
+
+			</div>
+
+			<div class="profile-section-main">
+
+				<ul class="nav nav-tabs profile-tabs" role="tablist">
+					<li class="nav-item"><a class="nav-link active"
+						data-toggle="tab" href="#profile-overview" role="tab"
+						style="color: #7F7FD5;">Wall</a></li>
+				</ul>
+
+
+				<div class="tab-content profile-tabs-content">
+					<div class="tab-pane active" id="profile-overview" role="tabpanel">
+						<form method="post" th:action="@{/submit}">
+							<div class="post-editor">
+								<textarea name="message" id="message" class="post-field"
+									placeholder="Write Something Cool!" required></textarea>
+								<div class="d-flex">
+									<button type="submit" class="btn  px-4 py-1"
+										style="background-color: #7F7FD5; color: white">Post</button>
+								</div>
+							</div>
+						</form>
+
+
+
+						<div class="stream-posts">
+							<div class="stream-post" th:each="post : ${posts}" th:reverse>
+								<div class="sp-author">
+									<a href="#" class="sp-author-avatar"><img
+										th:src="${post.user.profilePicture}" alt=""></a>
+									<h6 class="sp-author-name">
+										<a href="#" th:text="${post.user.firstName}"
+											th:if="${post != null}"></a>
+									</h6>
+								</div>
+								<div class="sp-content">
+									<div class="sp-info"
+										th:text="${#temporals.format(post.createdAt, 'dd-MM-yyyy HH:mm:ss')}"
+										th:if="${post != null}">posted at:</div>
+									<p class="sp-paragraph mb-0" th:text="${post.message}"
+										th:if="${post != null}"></p>
+								</div>
+
+							</div>
+
+							<div class="stream-post">
+								<div class="sp-author">
+									<a href="#" class="sp-author-avatar"><img
+										src="https://static.turbosquid.com/Preview/001214/650/2V/boy-cartoon-3D-model_D.jpg"
+										alt=""></a>
+									<h6 class="sp-author-name">
+										<a href="#">Anya Mac</a>
+									</h6>
+								</div>
+								<div class="sp-content">
+									<div class="sp-info">posted 1h ago</div>
+									<p class="sp-paragraph mb-0">If you haven't played
+										Minecraft yet, I highly recommend it. And if you have, let me
+										know what your favorite thing to build is in the comments
+										below!</p>
+								</div>
+
+							</div>
+
+							<div class="stream-post">
+								<div class="sp-author">
+									<a href="#" class="sp-author-avatar"><img
+										src="https://bootdey.com/img/Content/avatar/avatar6.png"
+										alt=""></a>
+									<h6 class="sp-author-name">
+										<a href="#">Ekaterina Machneva</a>
+									</h6>
+								</div>
+								<div class="sp-content">
+									<div class="sp-info">posted 2h ago</div>
+									<p class="sp-paragraph mb-0">I love how you can build
+										anything you want in Minecraft, from houses to roller
+										coasters. The creativity is endless! Plus, the game has so
+										many different modes, like survival and creative, so you can
+										play however you want.</p>
+								</div>
+
+							</div>
+
+							<div class="stream-post">
+								<div class="sp-author">
+									<a href="#" class="sp-author-avatar"><img
+										src="https://bootdey.com/img/Content/avatar/avatar6.png"
+										alt=""></a>
+									<h6 class="sp-author-name">
+										<a href="#">Max Remy</a>
+									</h6>
+								</div>
+								<div class="sp-content">
+									<div class="sp-info">posted 1h ago</div>
+									<p class="sp-paragraph mb-0">Hi there, I'm Max. I'm here to
+										introduce you to the wonderful world of gaming! Just like you,
+										I love to play games and have fun.</p>
+								</div>
+
+							</div>
+
+							<div class="stream-post mb-0">
+								<div class="sp-author">
+									<a href="#" class="sp-author-avatar"><img
+										src="https://bootdey.com/img/Content/avatar/avatar6.png"
+										alt=""></a>
+									<h6 class="sp-author-name">
+										<a href="#">Art Mac</a>
+									</h6>
+								</div>
+								<div class="sp-content">
+									<div class="sp-info">posted 2 days ago</div>
+									<p class="sp-paragraph">Hey everyone! I'm Art. I just
+										wanted to share my love for this awesome game called
+										"Minecraft". I've been playing it for a while now and it's
+										honestly one of the best games out there.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--Footer goes here-->
+	<div th:replace="~{footer :: footer}"></div>
+
+	<style type="text/css">
+.post-editor, .stream-post {
+	padding: .75rem;
+	background: #f7f7f9;
+	border: 1px solid #eceeef;
+	border-radius: .25rem;
+	margin-bottom: 1.5rem
+}
+
+.profile-wrapper {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: column;
+	flex-direction: column
+}
+
+@media ( min-width :768px) {
+	.profile-wrapper {
+		-webkit-box-orient: horizontal;
+		-webkit-box-direction: normal;
+		-ms-flex-direction: row;
+		flex-direction: row
+	}
+}
+
+body.menubar-top .profile-wrapper {
+	border: 1px solid #eceeef
+}
+
+.profile-section-user {
+	border-right: 1px solid #eceeef;
+	-webkit-box-flex: 0;
+	-ms-flex: 0 0 100%;
+	flex: 0 0 100%
+}
+
+@media ( min-width :768px) {
+	.profile-section-user {
+		-ms-flex-preferred-size: 34%;
+		flex-basis: 34%
+	}
+}
+
+@media ( min-width :992px) {
+	.profile-section-user {
+		-ms-flex-preferred-size: 30%;
+		flex-basis: 30%
+	}
+}
+
+.profile-section-user table {
+	margin-bottom: 0
+}
+
+.profile-section-user table td {
+	border: none;
+	padding-left: 0;
+	padding-right: 0
+}
+
+.profile-section-user .img-gallery [class*=col] {
+	padding-right: .25rem;
+	padding-left: .25rem
+}
+
+.profile-section-user .img-gallery .row {
+	margin-right: -.25rem;
+	margin-left: -.25rem
+}
+
+.profile-section-user .img-gallery .g__item {
+	margin-bottom: .5rem
+}
+
+.profile-cover-img img {
+	width: 100%;
+	height: auto
+}
+
+.profile-info-brief {
+	position: relative;
+	padding-top: 74px !important
+}
+
+.profile-info-brief .user-profile-avatar {
+	width: 100px;
+	height: 100px;
+	border-radius: 100%;
+	position: absolute;
+	top: -50px;
+	left: calc(50% - 50px)
+}
+
+.profile-section-main {
+	-webkit-box-flex: 0;
+	-ms-flex: 0 1 5000px;
+	flex: 0 1 5000px;
+	overflow: hidden
+}
+
+.profile-tabs {
+	padding: .75rem 1.5rem 0;
+	background: #f7f7f9;
+	border-top: 1px solid #eceeef
+}
+
+.profile-tabs .nav-link {
+	font-weight: 400;
+	padding: .75rem 1.5rem
+}
+
+.profile-tabs .nav-link.active, .profile-tabs .nav-link.active:focus,
+	.profile-tabs .nav-link.active:hover, .profile-tabs .nav-link:active,
+	.profile-tabs .nav-link:focus {
+	color: #60c84c
+}
+
+.profile-tabs-content .tab-pane {
+	padding: 1.5rem
+}
+
+.post-editor .post-field {
+	width: 100%;
+	height: 120px;
+	resize: vertical;
+	border-radius: .25rem;
+	margin-bottom: .5rem;
+	padding: .5rem;
+	border-color: #eceeef
+}
+
+.post-editor .post-field:focus {
+	box-shadow: none;
+	outline: none
+}
+
+.stream-post {
+	position: relative
+}
+
+.sp-author {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex
+}
+
+.sp-author .sp-author-avatar {
+	display: inline-block;
+	height: 64px;
+	width: 64px;
+	margin-right: 16px
+}
+
+.sp-author .sp-author-avatar img {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%
+}
+
+.sp-author .sp-author-name {
+	font-size: 1rem;
+	margin: .5rem 0
+}
+
+@media ( min-width :992px) {
+	.sp-author {
+		position: absolute;
+		width: 100%;
+		left: 1rem;
+		top: 1rem
+	}
+	.sp-author .sp-author-name {
+		margin: 0;
+		position: absolute;
+		left: 80px;
+		top: 8px;
+		background: rgba(0, 0, 0, .9);
+		padding: .75rem 1.5rem;
+		border-radius: 6px;
+		z-index: -1;
+		opacity: 0;
+		-webkit-transform: rotate(90deg);
+		-ms-transform: rotate(90deg);
+		transform: rotate(90deg);
+		-webkit-transform-origin: left center;
+		-ms-transform-origin: left center;
+		transform-origin: left center;
+		-webkit-transition: opacity .3s, -webkit-transform .3s;
+		transition: opacity .3s, -webkit-transform .3s;
+		transition: opacity .3s, transform .3s;
+		transition: opacity .3s, transform .3s, -webkit-transform .3s
+	}
+	.sp-author .sp-author-name>a {
+		color: #fff
+	}
+	.sp-author .sp-author-avatar:hover+.sp-author-name {
+		opacity: 1;
+		z-index: 9999;
+		-webkit-transform: rotate(0);
+		-ms-transform: rotate(0);
+		transform: rotate(0)
+	}
+	.sp-author .sp-author-name:after {
+		content: "";
+		display: block;
+		position: absolute;
+		left: -8px;
+		top: 50%;
+		-webkit-transform: translateY(-50%);
+		-ms-transform: translateY(-50%);
+		transform: translateY(-50%);
+		border-top: 8px solid transparent;
+		border-bottom: 8px solid transparent;
+		border-right: 8px solid rgba(0, 0, 0, .9)
+	}
+}
+
+.sp-content {
+	position: relative;
+	border-radius: .25rem;
+	background: #fff;
+	padding: 1rem;
+	margin-top: 1rem
+}
+
+.sp-content .sp-info {
+	font-size: .875rem;
+	color: #636c72;
+	position: absolute;
+	top: -3rem;
+	left: 80px
+}
+
+.sp-content .sp-paragraph {
+	font-size: 1rem;
+	line-height: 1.6;
+	margin-bottom: 1rem
+}
+
+.sp-content .sp-paragraph:last-child {
+	margin-bottom: 0
+}
+
+.sp-content .sp-gallery img {
+	margin-right: .5rem;
+	margin-bottom: .5rem;
+	max-width: 220px;
+	max-height: 130px
+}
+
+.sp-content .sp-video {
+	width: 100%;
+	height: auto
+}
+
+@media ( min-width :992px) {
+	.sp-content {
+		margin-left: 80px;
+		margin-top: 0
+	}
+	.sp-content .sp-info {
+		position: static;
+		font-style: italic;
+		margin-bottom: 1rem
+	}
+}
+
+#profile-settings textarea {
+	padding: 1rem;
+	line-height: 1.8;
+	height: 140px;
+	font-style: italic
+}
+
+#profile-settings label {
+	font-size: 1rem
+}
+
+#profile-settings .form-control {
+	color: #818a91
+}
+
+#profile-settings .form-control, #profile-settings .form-control:focus {
+	box-shadow: none;
+	outline: none
+}
+
+.edit-cover {
+	position: relative;
+	padding: .5rem;
+	border-radius: .25rem;
+	border: 1px solid #eceeef;
+	background: #f7f7f9;
+	height: 400px
+}
+
+.edit-cover img {
+	border-radius: .25rem;
+	width: 100%;
+	height: 100%
+}
+
+.edit-cover .btn {
+	position: absolute;
+	right: 32px;
+	bottom: 32px
+}
+</style>
+
+	<!--  script for main page -->
+	<script data-cfasync="false"
+		src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+	<script type="text/javascript"></script>
+
+
+
+	<!--  script for NavBar -->
+	<script type="text/javascript"
+		th:src="@{/webjars/jquery/3.2.1/jquery.min.js/}"></script>
+	<script type="text/javascript"
+		th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+</body>
+</html>
